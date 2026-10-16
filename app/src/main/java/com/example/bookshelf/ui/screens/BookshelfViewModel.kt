@@ -1,4 +1,5 @@
 package com.example.bookshelf.ui.screens
+
 import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -13,6 +14,7 @@ import retrofit2.HttpException
 import java.io.IOException
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import com.example.bookshelf.BookshelfApplication
+import com.example.bookshelf.BuildConfig
 import com.example.bookshelf.data.BooksRepository
 import com.example.bookshelf.network.Book
 
@@ -33,6 +35,7 @@ class BookshelfViewModel(private val booksRepository: BooksRepository) : ViewMod
     fun getBooks(query: String = "jazz history") {
         viewModelScope.launch {
             bookshelfUiState = BookshelfUiState.Loading
+            Log.d("Bookshelf", "key length=${BuildConfig.BOOKS_API_KEY.length}")
             bookshelfUiState = try {
                 val response = booksRepository.getBooks(query)
                 BookshelfUiState.Success(response.items)
@@ -40,7 +43,8 @@ class BookshelfViewModel(private val booksRepository: BooksRepository) : ViewMod
                 Log.e("Bookshelf", "IOException: ${e.message}", e)
                 BookshelfUiState.Error
             } catch (e: HttpException) {
-                Log.e("Bookshelf", "HttpException: ${e.code()} ${e.message()}", e)
+                val body = e.response()?.errorBody()?.string()
+                Log.e("Bookshelf", "HttpException ${e.code()} body=$body")
                 BookshelfUiState.Error
             }
         }
