@@ -17,23 +17,23 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.bookshelf.R
-import com.example.bookshelf.ui.screens.BookshelfViewModel
+import com.example.bookshelf.ui.screens.AmphibiansViewModel
 import com.example.bookshelf.ui.screens.HomeScreen
 
 @Composable
-fun BookshelfApp() {
+fun AmphibiansApp() {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-        topBar = { BookshelfTopAppBar(scrollBehavior = scrollBehavior) }
+        topBar = { AmphibiansTopAppBar(scrollBehavior = scrollBehavior) }
     ) {
         Surface(
             modifier = Modifier.fillMaxSize()
         ) {
-            val bookshelfViewModel: BookshelfViewModel = viewModel(factory = BookshelfViewModel.Factory)
+            val amphibiansViewModel: AmphibiansViewModel = viewModel(factory = AmphibiansViewModel.Factory)
             HomeScreen(
-                bookshelfUiState = bookshelfViewModel.bookshelfUiState,
-                retryAction = { bookshelfViewModel.getBooks() },
+                amphibiansUiState = amphibiansViewModel.amphibiansUiState,
+                retryAction = { amphibiansViewModel.getAmphibians() },
                 contentPadding = it,
             )
         }
@@ -41,7 +41,7 @@ fun BookshelfApp() {
 }
 
 @Composable
-fun BookshelfTopAppBar(scrollBehavior: TopAppBarScrollBehavior, modifier: Modifier = Modifier) {
+fun AmphibiansTopAppBar(scrollBehavior: TopAppBarScrollBehavior, modifier: Modifier = Modifier) {
     CenterAlignedTopAppBar(
         scrollBehavior = scrollBehavior,
         title = {

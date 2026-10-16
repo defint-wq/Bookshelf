@@ -14,38 +14,36 @@ import retrofit2.HttpException
 import java.io.IOException
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import com.example.bookshelf.BookshelfApplication
-import com.example.bookshelf.BuildConfig
-import com.example.bookshelf.data.BooksRepository
-import com.example.bookshelf.network.Book
+import com.example.bookshelf.data.AmphibiansRepository
+import com.example.bookshelf.network.Amphibian
 
-sealed interface BookshelfUiState {
-    data class Success(val books: List<Book>) : BookshelfUiState
-    object Error : BookshelfUiState
-    object Loading : BookshelfUiState
+sealed interface AmphibiansUiState {
+    data class Success(val amphibians: List<Amphibian>) : AmphibiansUiState
+    object Error : AmphibiansUiState
+    object Loading : AmphibiansUiState
 }
 
-class BookshelfViewModel(private val booksRepository: BooksRepository) : ViewModel() {
-    var bookshelfUiState: BookshelfUiState by mutableStateOf(BookshelfUiState.Loading)
+class AmphibiansViewModel(private val amphibiansRepository: AmphibiansRepository) : ViewModel() {
+    var amphibiansUiState: AmphibiansUiState by mutableStateOf(AmphibiansUiState.Loading)
         private set
 
     init {
-        getBooks()
+        getAmphibians()
     }
 
-    fun getBooks(query: String = "jazz history") {
+    fun getAmphibians() {
         viewModelScope.launch {
-            bookshelfUiState = BookshelfUiState.Loading
-            Log.d("Bookshelf", "key length=${BuildConfig.BOOKS_API_KEY.length}")
-            bookshelfUiState = try {
-                val response = booksRepository.getBooks(query)
-                BookshelfUiState.Success(response.items)
+            amphibiansUiState = AmphibiansUiState.Loading
+            amphibiansUiState = try {
+                val list = amphibiansRepository.getAmphibians()
+                AmphibiansUiState.Success(list)
             } catch (e: IOException) {
-                Log.e("Bookshelf", "IOException: ${e.message}", e)
-                BookshelfUiState.Error
+                Log.e("Amphibians", "IOException: ${e.message}", e)
+                AmphibiansUiState.Error
             } catch (e: HttpException) {
                 val body = e.response()?.errorBody()?.string()
-                Log.e("Bookshelf", "HttpException ${e.code()} body=$body")
-                BookshelfUiState.Error
+                Log.e("Amphibians", "HttpException ${e.code()} body=$body")
+                AmphibiansUiState.Error
             }
         }
     }
@@ -54,8 +52,8 @@ class BookshelfViewModel(private val booksRepository: BooksRepository) : ViewMod
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
                 val application = (this[APPLICATION_KEY] as BookshelfApplication)
-                val booksRepository = application.container.booksRepository
-                BookshelfViewModel(booksRepository = booksRepository)
+                val amphibiansRepository = application.container.amphibiansRepository
+                AmphibiansViewModel(amphibiansRepository = amphibiansRepository)
             }
         }
     }

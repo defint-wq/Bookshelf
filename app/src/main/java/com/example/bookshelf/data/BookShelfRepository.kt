@@ -1,14 +1,14 @@
 package com.example.bookshelf.data
 
-import com.example.bookshelf.network.BookResponse
-import com.example.bookshelf.network.BooksApiService
+import com.example.bookshelf.network.Amphibian
+import com.example.bookshelf.network.AmphibiansApiService
 
-interface BooksRepository {
-    suspend fun getBooks(query: String): BookResponse
+interface AmphibiansRepository {
+    suspend fun getAmphibians(): List<Amphibian>
 }
 
-class NetworkBooksRepository(
-    private val booksApiService: BooksApiService
-): BooksRepository {
-    override suspend fun getBooks(query: String): BookResponse = booksApiService.getBooks(query)
+class NetworkAmphibiansRepository(
+    private val amphibiansApiService: AmphibiansApiService
+): AmphibiansRepository {
+    override suspend fun getAmphibians(): List<Amphibian> = amphibiansApiService.getAmphibians()
 }

@@ -1,9 +1,7 @@
-import java.util.Properties
-
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
-    kotlin("plugin.serialization") version "1.9.0"
+    kotlin("plugin.serialization") version "1.9.24"
 }
 
 android {
@@ -18,16 +16,6 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-
-        val localProps = Properties().apply {
-            val f = rootProject.file("local.properties")
-            if (f.exists()) f.inputStream().use { load(it) }
-        }
-        buildConfigField(
-            "String",
-            "BOOKS_API_KEY",
-            "\"${localProps.getProperty("BOOKS_API_KEY", "")}\""
-        )
     }
 
     buildTypes {
@@ -45,7 +33,7 @@ android {
     }
     buildFeatures {
         compose = true
-        buildConfig = true
+        buildConfig = false // API key ашиглахгүй тул BuildConfig-ийг хааж болно
     }
 }
 

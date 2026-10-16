@@ -1,18 +1,18 @@
 package com.example.bookshelf.data
 
-import com.example.bookshelf.network.BooksApiService
+import com.example.bookshelf.network.AmphibiansApiService
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import retrofit2.Retrofit
 
 interface AppContainer {
-    val booksRepository: BooksRepository
+    val amphibiansRepository: AmphibiansRepository
 }
 
 class DefaultAppContainer : AppContainer {
 
-    private val baseUrl = "https://www.googleapis.com/books/v1/"
+    private val baseUrl = "https://android-kotlin-fun-mars-server.appspot.com/"
 
     private val json = Json {
         ignoreUnknownKeys = true
@@ -23,11 +23,11 @@ class DefaultAppContainer : AppContainer {
         .baseUrl(baseUrl)
         .build()
 
-    private val retrofitService: BooksApiService by lazy {
-        retrofit.create(BooksApiService::class.java)
+    private val retrofitService: AmphibiansApiService by lazy {
+        retrofit.create(AmphibiansApiService::class.java)
     }
 
-    override val booksRepository: BooksRepository by lazy {
-        NetworkBooksRepository(retrofitService)
+    override val amphibiansRepository: AmphibiansRepository by lazy {
+        NetworkAmphibiansRepository(retrofitService)
     }
 }

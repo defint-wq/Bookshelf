@@ -1,25 +1,13 @@
 package com.example.bookshelf.network
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class BookResponse(
-    val items: List<Book> = emptyList()
-)
-
-@Serializable
-data class Book(
-    val id: String,
-    val volumeInfo: VolumeInfo? = null
-)
-
-@Serializable
-data class VolumeInfo(
-    val title: String? = null,
-    val imageLinks: ImageLinks? = null
-)
-
-@Serializable
-data class ImageLinks(
-    val thumbnail: String? = null
+data class Amphibian(
+    val name: String,
+    val type: String,
+    val description: String,
+    @SerialName("img_src")
+    val imgSrc: String
 )
